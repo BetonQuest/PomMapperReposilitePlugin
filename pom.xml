@@ -1,0 +1,85 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.betonquest</groupId>
+    <artifactId>parent</artifactId>
+    <version>2.2.1</version>
+  </parent>
+
+  <name>pommapper-reposilite-plugin</name>
+  <artifactId>pommapper-reposilite-plugin</artifactId>
+  <version>${revision}${changelist}</version>
+  <description>
+    A plugin to extract information from maven artifact's pom.xml
+    and offer customized and optimized requests via rest api calls
+  </description>
+
+  <properties>
+    <revision>1.0.0</revision>
+    <changelist>-SNAPSHOT</changelist>
+    <kotlin.version>2.2.21</kotlin.version>
+    <maven-artifact.version>4.0.0-rc-5</maven-artifact.version>
+    <reposilite.version>3.5.26</reposilite.version>
+  </properties>
+
+  <licenses>
+    <license>
+      <name>GNU General Public License v3.0</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <repositories>
+    <repository>
+      <id>betonquest-repo</id>
+      <url>https://repo.betonquest.org/betonquest/</url>
+    </repository>
+    <repository>
+      <id>Reposilite-Releases</id>
+      <url>https://maven.reposilite.com/releases</url>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-bom</artifactId>
+        <version>${kotlin.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.reposilite</groupId>
+      <artifactId>reposilite</artifactId>
+      <version>${reposilite.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
+      <version>${kotlin.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+      <version>${maven-artifact.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+</project>

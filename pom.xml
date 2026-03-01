@@ -22,7 +22,7 @@
     <changelist>-SNAPSHOT</changelist>
     <kotlin.version>2.3.10</kotlin.version>
     <maven-artifact.version>4.0.0-rc-5</maven-artifact.version>
-    <reposilite.version>3.5.26</reposilite.version>
+    <reposilite.version>3.5.28</reposilite.version>
   </properties>
 
   <licenses>

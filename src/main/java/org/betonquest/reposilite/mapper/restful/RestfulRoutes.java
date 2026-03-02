@@ -35,13 +35,23 @@ import java.util.function.Predicate;
 /**
  * Contains and handles all routes for the Restful API.
  */
-@SuppressWarnings({"MissingJavadoc", "PMD.CommentRequired", "PMD.ShortVariable"})
 public class RestfulRoutes extends MavenRoutes implements RestfulDefinitions {
 
+    /**
+     * The gson instance.
+     */
     private final Gson gson = new GsonBuilder().create();
 
+    /**
+     * The base facade of the plugin.
+     */
     private final PomMapperFacade baseFacade;
 
+    /**
+     * An open-api restful endpoint.
+     * <br>
+     * Returns all versions with their downloadable jars by internal id.
+     */
     @OpenApi(
             path = SERVICE_ID_PATH,
             methods = HttpMethod.GET,
@@ -66,6 +76,11 @@ public class RestfulRoutes extends MavenRoutes implements RestfulDefinitions {
         return Unit.INSTANCE;
     });
 
+    /**
+     * An open-api restful endpoint.
+     * <br>
+     * Returns all versions with their downloadable jars by their gav.
+     */
     @OpenApi(
             path = SERVICE_REPOSITORY_PATH,
             methods = HttpMethod.GET,
@@ -136,19 +151,19 @@ public class RestfulRoutes extends MavenRoutes implements RestfulDefinitions {
     private void serviceAccessHandler(final ContextDsl<Void> context) {
         context.accessed(token -> {
             final Context ctx = context.getCtx();
-            final String id = context.requireParameter("id");
+            final String idParameter = context.requireParameter("id");
             final ArtifactsVersionsCache artifactsVersionsCache = baseFacade.getArtifactsVersionsCache();
 
-            if (!artifactsVersionsCache.hasEntry(id)) {
+            if (!artifactsVersionsCache.hasEntry(idParameter)) {
                 ctx.status(HttpStatus.NOT_FOUND);
-                debug("Artifact not found for id \"" + id + "\"");
+                debug("Artifact not found for id \"" + idParameter + "\"");
                 return null;
             }
 
-            final List<PomVersionedEntry> entries = artifactsVersionsCache.getVersions(id);
+            final List<PomVersionedEntry> entries = artifactsVersionsCache.getVersions(idParameter);
             if (entries.isEmpty()) {
                 ctx.status(HttpStatus.NO_CONTENT).result("No entries found.");
-                debug("No entries found for id \"" + id + "\"");
+                debug("No entries found for id \"" + idParameter + "\"");
                 return null;
             }
 
@@ -157,7 +172,7 @@ public class RestfulRoutes extends MavenRoutes implements RestfulDefinitions {
             final int limit = readOptionalQuery(ctx, SERVICE_ID_QPARAM_NAME_LIMIT_VERSIONS, Integer.class, SERVICE_ID_QPARAM_DEFAULT_LIMIT_VERSIONS);
             final String since = readOptionalQuery(ctx, SERVICE_ID_QPARAM_NAME_SINCE, String.class, SERVICE_ID_QPARAM_DEFAULT_SINCE);
 
-            debug("Found " + entries.size() + " entries for id \"" + id + "\"");
+            debug("Found " + entries.size() + " entries for id \"" + idParameter + "\"");
             debug("filter with: snapshots=\"" + considerSnapshots + "\", releases=\"" + considerReleases + "\", limit=\"" + limit + "\", since=\"" + since + "\"");
 
             final Predicate<PomVersionedEntry> filterTypes = version ->

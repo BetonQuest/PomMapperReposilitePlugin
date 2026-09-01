@@ -53,6 +53,7 @@ public final class PomMapperPluginSettings implements SharedSettings, Validatabl
      * @see #getArtifacts()
      */
     @SuppressFBWarnings("SE_BAD_FIELD")
+    @SuppressWarnings("PMD.NonSerializableClass")
     /*default*/ List<Artifact> artifacts = new ArrayList<>();
 
     /**
